@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tutoring Flyer – Sachit Daniel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #1a2744;
+      --gold:   #b8842e;
+      --mid:    #4a5568;
+      --light:  #f0ece4;
+      --white:  #ffffff;
+      --border: #c8c0b0;
+      --text:   #1a1a1a;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      gap: 1rem;
+    }
+
+    .controls {
+      background: white;
+      border-radius: 8px;
+      padding: .7rem 1.2rem;
+      display: flex;
+      gap: .6rem;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,.1);
+      width: 210mm;
+      flex-wrap: wrap;
+    }
+    .controls label { font-size: .82rem; color: #374151; font-weight: 500; white-space: nowrap; }
+    .controls input {
+      flex: 1;
+      border: 1.5px solid #d1d5db;
+      border-radius: 6px;
+      padding: .35rem .7rem;
+      font-family: monospace;
+      font-size: .82rem;
+      color: var(--navy);
+      outline: none;
+      min-width: 200px;
+    }
+    .controls input:focus { border-color: var(--navy); }
+    .controls button {
+      background: var(--navy);
+      color: white;
+      border: none;
+      padding: .38rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: .8rem;
+      font-family: inherit;
+      font-weight: 600;
+    }
+    .controls .print-btn { background: var(--gold); }
+
+    .flyer {
+      width: 210mm;
+      min-height: 297mm;
+      background: var(--white);
+      box-shadow: 0 8px 40px rgba(0,0,0,.15);
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border);
+    }
+
+    /* HEADER */
+    .flyer-header {
+      border-bottom: 3px solid var(--navy);
+      padding: 1.8rem 2.2rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
+    .header-left { flex: 1; }
+    .header-tag {
+      display: inline-block;
+      background: var(--navy);
+      color: white;
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .2rem .7rem;
+      border-radius: 3px;
+      margin-bottom: .7rem;
+    }
+    .flyer-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.9rem;
+      color: var(--navy);
+      line-height: 1.1;
+      margin-bottom: .2rem;
+    }
+    .flyer-tagline {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--gold);
+    }
+    .header-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .header-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.6rem;
+      color: var(--navy);
+      line-height: 1;
+    }
+    .header-price sup { font-size: 1.2rem; vertical-align: super; }
+    .header-price-note { font-size: .7rem; color: var(--mid); margin-top: .1rem; }
+    .header-price-intro { font-size: .72rem; color: var(--gold); font-weight: 600; margin-top: .2rem; }
+
+    /* SUBJECTS */
+    .subjects-band {
+      background: var(--light);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: .55rem 2.2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: .3rem .5rem;
+      align-items: center;
+    }
+    .subj-label {
+      font-size: .65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--navy);
+      margin-right: .3rem;
+    }
+    .subj-pill {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: .18rem .65rem;
+      font-size: .68rem;
+      color: var(--text);
+      font-weight: 500;
+    }
+    .subj-pill.special { border-color: var(--gold); color: var(--gold); font-weight: 600; }
+
+    /* BODY */
+    .flyer-body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .col-left {
+      padding: 1.5rem 1.4rem 1.5rem 2.2rem;
+      border-right: 1px solid var(--border);
+    }
+    .col-right {
+      padding: 1.5rem 2.2rem 1.5rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      align-items: center;
+    }
+
+    .section-label {
+      font-size: .58rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: .4rem;
+    }
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--navy);
+      margin-bottom: .9rem;
+      border-bottom: 1.5px solid var(--light);
+      padding-bottom: .5rem;
+    }
+
+    .cred-list { list-style: none; margin-bottom: 1.4rem; }
+    .cred-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: .5rem;
+      font-size: .78rem;
+      color: var(--text);
+      padding: .32rem 0;
+      border-bottom: 1px solid var(--light);
+      line-height: 1.35;
+    }
+    .cred-list li:last-child { border-bottom: none; }
+    .cred-ic { flex-shrink: 0; font-size: .9rem; margin-top: .05rem; }
+    .cred-main { font-weight: 600; color: var(--navy); }
+    .cred-sub { font-size: .7rem; color: var(--mid); display: block; }
+
+    .about-blurb {
+      font-size: .77rem;
+      color: var(--mid);
+      line-height: 1.6;
+      margin-bottom: 1.4rem;
+    }
+
+    .price-row { display: flex; gap: .7rem; margin-bottom: 1rem; }
+    .mini-price {
+      flex: 1;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: .7rem .8rem;
+      text-align: center;
+    }
+    .mini-price.highlight { border-color: var(--navy); background: var(--light); }
+    .mini-price .mp-amt {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--navy);
+    }
+    .mini-price .mp-amt sup { font-size: .8rem; vertical-align: super; }
+    .mini-price .mp-label { font-size: .62rem; color: var(--mid); margin-top: .1rem; }
+    .mini-price .mp-tag { font-size: .58rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--gold); margin-bottom: .2rem; }
+
+    .consult-box {
+      background: var(--light);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: .7rem .9rem;
+      font-size: .73rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .consult-box strong { color: var(--navy); display: block; margin-bottom: .2rem; font-size: .76rem; }
+
+    .qr-box {
+      background: var(--light);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      width: 100%;
+      text-align: center;
+    }
+    .qr-box .qb-label { font-size: .62rem; text-transform: uppercase; letter-spacing: .08em; color: var(--mid); margin-bottom: .6rem; font-weight: 600; }
+    #qrcode { display: flex; justify-content: center; margin-bottom: .5rem; }
+    #qrcode canvas, #qrcode img { border-radius: 4px; }
+    .qr-url { font-size: .6rem; color: var(--mid); word-break: break-all; font-family: monospace; }
+
+    .contact-box {
+      border: 1.5px solid var(--navy);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      width: 100%;
+    }
+    .contact-box .cb-title { font-size: .62rem; text-transform: uppercase; letter-spacing: .08em; color: var(--gold); font-weight: 700; margin-bottom: .7rem; }
+    .ct-row { display: flex; align-items: center; gap: .5rem; font-size: .78rem; color: var(--text); margin-bottom: .4rem; }
+    .ct-row:last-child { margin-bottom: 0; }
+    .ct-row .ci { font-size: .9rem; flex-shrink: 0; }
+    .ct-row a { color: var(--navy); text-decoration: none; font-weight: 600; }
+
+    .offer-box {
+      border: 1.5px solid var(--gold);
+      border-radius: 8px;
+      padding: .8rem 1rem;
+      width: 100%;
+      font-size: .73rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .offer-box strong { color: var(--navy); display: block; margin-bottom: .2rem; }
+
+    .flyer-footer {
+      border-top: 2px solid var(--navy);
+      padding: .65rem 2.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--light);
+    }
+    .ff-quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: .78rem; color: var(--mid); }
+    .ff-web { font-size: .72rem; color: var(--navy); font-weight: 600; font-family: monospace; }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .controls { display: none !important; }
+      .flyer { box-shadow: none; border: none; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="controls">
+  <label>Website URL for QR code:</label>
+  <input type="url" id="websiteUrl" value="https://YOUR-USERNAME.github.io/tutoring" />
+  <button onclick="updateQR()">Update QR</button>
+  <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<div class="flyer">
+
+  <div class="flyer-header">
+    <div class="header-left">
+      <div class="header-tag">Expert Tutoring | PhD Qualified</div>
+      <div class="flyer-name">Sachit Daniel</div>
+      <div class="flyer-tagline">"Schoolwork needn't be boring!"</div>
+    </div>
+    <div class="header-right">
+      <div class="header-price"><sup>£</sup>35</div>
+      <div class="header-price-note">per hour (regular rate)</div>
+      <div class="header-price-intro">First session only £5</div>
+      <div class="header-price-intro">Free initial consultation</div>
+    </div>
+  </div>
+
+  <div class="subjects-band">
+    <span class="subj-label">Subjects:</span>
+    <span class="subj-pill">Biology</span>
+    <span class="subj-pill">Physics</span>
+    <span class="subj-pill">Chemistry</span>
+    <span class="subj-pill">Mathematics</span>
+    <span class="subj-pill">Computing and Computer Science</span>
+    <span class="subj-pill">Computational Biology</span>
+    <span class="subj-pill special">Grammar School Entrance (11+ / 13+)</span>
+  </div>
+
+  <div class="flyer-body">
+    <div class="col-left">
+      <div class="section-label">About the Tutor</div>
+      <div class="section-heading">Qualifications and Experience</div>
+      <ul class="cred-list">
+        <li>
+          <span class="cred-ic">🧬</span>
+          <div><span class="cred-main">PhD in Computational Biology</span><span class="cred-sub">National Centre for Biological Sciences (NCBS)</span></div>
+        </li>
+        <li>
+          <span class="cred-ic">🥉</span>
+          <div><span class="cred-main">International Biology Olympiad</span><span class="cred-sub">Bronze Medal</span></div>
+        </li>
+        <li>
+          <span class="cred-ic">🏆</span>
+          <div><span class="cred-main">Ranked 3rd Nationally, CSIR-NET</span><span class="cred-sub">College Lecturer Qualification Exam, India</span></div>
+        </li>
+        <li>
+          <span class="cred-ic">✏️</span>
+          <div><span class="cred-main">5+ Years Setting National Quiz Questions</span></div>
+        </li>
+        <li>
+          <span class="cred-ic">🎓</span>
+          <div><span class="cred-main">Classroom and One-to-One Coaching</span><span class="cred-sub">Conceptual learning and exam preparation</span></div>
+        </li>
+        <li>
+          <span class="cred-ic">🌐</span>
+          <div><span class="cred-main">Wikipedia Science Contributor</span></div>
+        </li>
+      </ul>
+
+      <p class="about-blurb">I adapt my teaching style to each student using whatever approach helps the concepts stick. Sessions are engaging, structured, and always focused on what you need to improve.</p>
+
+      <div class="section-label">Pricing</div>
+      <div class="section-heading">Straightforward Rates</div>
+      <div class="price-row">
+        <div class="mini-price">
+          <div class="mp-tag">Try First</div>
+          <div class="mp-amt"><sup>£</sup>5</div>
+          <div class="mp-label">First session</div>
+        </div>
+        <div class="mini-price highlight">
+          <div class="mp-tag">Regular Rate</div>
+          <div class="mp-amt"><sup>£</sup>35</div>
+          <div class="mp-label">Per hour</div>
+        </div>
+      </div>
+      <div class="consult-box">
+        <strong>Free Initial Consultation</strong>
+        Not sure where to start? I offer a free 15-minute call to discuss your needs before any commitment.
+      </div>
+    </div>
+
+    <div class="col-right">
+      <div style="width:100%">
+        <div class="section-label">Visit Online</div>
+        <div class="section-heading">Scan to See the Website</div>
+      </div>
+
+      <div class="qr-box">
+        <div class="qb-label">Scan with your phone camera</div>
+        <div id="qrcode"></div>
+        <div class="qr-url" id="qrUrlDisplay">https://YOUR-USERNAME.github.io/tutoring</div>
+      </div>
+
+      <div class="contact-box">
+        <div class="cb-title">Get in Touch</div>
+        <div class="ct-row"><span class="ci">✉️</span><div><a href="mailto:sachit.daniel.uk@gmail.com">sachit.daniel.uk@gmail.com</a></div></div>
+        <div class="ct-row"><span class="ci">📞</span><div><a href="tel:+447733672182">+447733672182</a></div></div>
+        <div class="ct-row"><span class="ci">📍</span><div>UK-based. Online sessions available worldwide.</div></div>
+      </div>
+
+      <div class="offer-box">
+        <strong>Your First Session for Just £5</strong>
+        Try a full session on any subject or level with no commitment. See if the teaching style works for you before signing up for regular sessions.
+      </div>
+    </div>
+  </div>
+
+  <div class="flyer-footer">
+    <span class="ff-quote">Passionate about making learning clear and enjoyable</span>
+    <span class="ff-web" id="flyerWebUrl">sachit.daniel.uk@gmail.com</span>
+  </div>
+
+</div>
+
+<script>
+  function generateQR(url) {
+    const container = document.getElementById('qrcode');
+    container.innerHTML = '';
+    new QRCode(container, {
+      text: url,
+      width: 140,
+      height: 140,
+      colorDark: '#1a2744',
+      colorLight: '#f0ece4',
+      correctLevel: QRCode.CorrectLevel.H
+    });
+    document.getElementById('qrUrlDisplay').textContent = url;
+    document.getElementById('flyerWebUrl').textContent = url.replace('https://','');
+  }
+  function updateQR() {
+    const url = document.getElementById('websiteUrl').value.trim();
+    if (url) generateQR(url);
+  }
+  window.onload = () => generateQR(document.getElementById('websiteUrl').value);
+</script>
+
+</body>
+</html>
